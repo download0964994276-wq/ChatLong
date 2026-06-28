@@ -25,7 +25,7 @@ class AuthController extends Controller
         ]);
 
         return response([
-            'message' => 'User signed up.',
+            'message' => 'User signed up Successfully.',
             'user' => $user
         ], 201);
     }
@@ -39,6 +39,7 @@ class AuthController extends Controller
 
         $user = User::where('email', $request->email)->first();
 
+        // Return early or Control early
         if (!Hash::check($request->password, $user->password)) {
             throw ValidationException::withMessages([
                 'password' => 'Password does not match.',
@@ -62,8 +63,8 @@ class AuthController extends Controller
         $user->currentAccessToken()->delete();
 
         // option 2
-        $currentToken = $user->currentAccessToken();
-        $user->tokens()->where('id', $currentToken->id)->delete();
+        // $currentToken = $user->currentAccessToken();
+        // $user->tokens()->where('id', $currentToken->id)->delete();
 
         return response([
             'message' => 'User signed out.'
